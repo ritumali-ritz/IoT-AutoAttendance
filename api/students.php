@@ -1,0 +1,1 @@
+<?php header('Content-Type: application/json'); require 'db.php'; $res = $mysqli->query('SELECT s.roll_no,s.name,c.class_name FROM students s LEFT JOIN classes c ON s.class_id=c.id ORDER BY s.roll_no'); $out=[]; while($r=$res->fetch_assoc()) $out[]=$r; echo json_encode($out); ?>

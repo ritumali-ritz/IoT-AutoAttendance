@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Scans Admin</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-3">
+  <h3>Unprocessed Scans</h3>
+  <div id="list"></div>
+  <hr/>
+  <h5>Assign card to student</h5>
+  <div class="row g-2">
+    <div class="col-md-4"><input id="assignUid" class="form-control" placeholder="UID"></div>
+    <div class="col-md-4"><input id="assignRoll" class="form-control" placeholder="Roll No"></div>
+    <div class="col-md-4"><button id="assignBtn" class="btn btn-primary">Assign & mark present</button></div>
+  </div>
+  <div id="msg" class="mt-3"></div>
+
+<script>
+async function load(){
+  const r = await fetch('api/new_scans.php');
+  const j = await r.json();
+  const list = document.getElementById('list'); list.innerHTML='';
+  if(!j.length) list.innerHTML='<div class="alert alert-info">No unprocessed scans</div>';
+  j.forEach(s=>{
+    const el = document.createElement('div'); el.className='p-2 border mb-1 d-flex justify-content-between';
+    el.innerHTML = `<div><strong>${s.rfid_uid}</strong><div class="text-muted small">${s.received_at}</div></div><div><button class="btn btn-sm btn-success" onclick="prefill('${s.rfid_uid}')">Assign</button></div>`;
+    list.appendChild(el);
+  });
+}
+function prefill(uid){ document.getElementById('assignUid').value = uid; }
+
+document.getElementById('assignBtn').addEventListener('click', async ()=>{
+  const uid = document.getElementById('assignUid').value.trim();
+  const roll = document.getElementById('assignRoll').value.trim();
+  if(!uid||!roll) return alert('Fill both');
+  const r = await fetch('api/assign_card.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({rfid_uid:uid, roll_no:roll})});
+  const j = await r.json(); document.getElementById('msg').textContent = JSON.stringify(j);
+  load();
+});
+
+load(); setInterval(load,3000);
+</script>
+</body>
+</html>

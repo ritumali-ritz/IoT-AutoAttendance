@@ -1,0 +1,1 @@
+<?php header('Content-Type: application/json'); $d=json_decode(file_get_contents('php://input'),true); require 'db.php'; $id=intval($d['id']); $status=$mysqli->real_escape_string($d['status']); $mysqli->query("UPDATE attendance SET status='{$status}' WHERE id={$id}"); echo json_encode(['success'=>true]); ?>

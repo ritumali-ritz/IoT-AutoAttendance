@@ -1,0 +1,1 @@
+<?php header('Content-Type: application/json'); require 'db.php'; $res = $mysqli->query('SELECT * FROM classes ORDER BY id DESC'); $out = []; while($r=$res->fetch_assoc()) $out[]=$r; echo json_encode($out); ?>

@@ -1,0 +1,1 @@
+<?php header('Content-Type: application/json'); $d=json_decode(file_get_contents('php://input'),true); require 'db.php'; $id=intval($d['id']); $mysqli->query("DELETE FROM classes WHERE id={$id}"); echo json_encode(['success'=>true]); ?>

@@ -1,0 +1,1 @@
+<?php header('Content-Type: application/json'); $d=json_decode(file_get_contents('php://input'),true); require 'db.php'; $name=$mysqli->real_escape_string($d['class_name']); $mysqli->query("INSERT INTO classes (class_name) VALUES ('{$name}')"); echo json_encode(['success'=>true]); ?>
